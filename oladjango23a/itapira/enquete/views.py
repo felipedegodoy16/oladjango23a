@@ -8,3 +8,13 @@ def index(request):
 
 def caneta(request):
     return HttpResponse("<h1>Caneta Azul, Azul caneta...</h1>")
+
+def detalhe(request, questao_id):
+    return HttpResponse("Voce esta olhando a questao %s." % questao_id)
+
+def resultados(request, questao_id):
+    response = "Voce esta olhando o resultado da questao %s."
+    return HttpResponse(response % questao_id)
+
+def voto(request, questao_id):
+    return HttpResponse("Voce esta votando no resultado da questao %s." % questao_id)
