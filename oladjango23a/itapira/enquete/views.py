@@ -1,19 +1,31 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import Http404
 from .models import Questao
 
 # Create your views here.
 
 def index(request):
+    # selecionar os 5 ultimos objetos cadastrados
     ultimas_questoes = Questao.objects.order_by("-data")[:5]
-    saida = ", ".join([q.pergunta for q in ultimas_questoes])
-    return HttpResponse(saida)
+    # criamos um dicionario em python (semelhante aos arrays associativos do php)
+    # (ou os arrays objetos literais do javascript) onde passamos essa variavel para ser utilizada no template)
+    context = {'ultimas_questoes': ultimas_questoes}
+    # retornar a funcao render, passando como argumentos a requisicao,
+    # o template que sera utilizado e as variaveis de contexto que serao utilizadas dentro do template
+    return render(request, 'enquete/index.html', context)
+    # saida = ", ".join([q.pergunta for q in ultimas_questoes])
+    # return HttpResponse(saida)
 
 def caneta(request):
     return HttpResponse("<h1>Caneta Azul, Azul caneta...</h1>")
 
 def detalhe(request, questao_id):
-    return HttpResponse("Voce esta olhando a questao %s." % questao_id)
+    try:
+        questao = Questao.objects.get(pk=questao_id)
+    except Questao.DoesNotExists:
+        raise Http404("Questao nao ecxisty")
+    return render(request, 'enquete/detalhe.html', {'questao': questao})
 
 def resultados(request, questao_id):
     response = "Voce esta olhando o resultado da questao %s."
