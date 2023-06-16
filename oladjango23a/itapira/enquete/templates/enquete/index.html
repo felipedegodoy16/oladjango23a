@@ -12,9 +12,9 @@
     {% for questoes in ultimas_questoes %}
         <li>
 
-            {# retorna o id da questao {{ questoes.id }} #}
+            {# utiliza o name da url para retornar ela #}
 
-            <a href="/enquete/{{ questoes.id }}/">
+            <a href="{% url 'detalhe' questoes.id %}">
 
                 {# retorna a pergunta da questao {{ questoes.pergunta }} #}
 

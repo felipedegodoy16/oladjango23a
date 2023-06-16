@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.http import Http404
 from .models import Questao
@@ -7,7 +7,7 @@ from .models import Questao
 
 def index(request):
     # selecionar os 5 ultimos objetos cadastrados
-    ultimas_questoes = Questao.objects.order_by("-data")[:5]
+    ultimas_questoes = Questao.objects.order_by("data")[:5]
     # criamos um dicionario em python (semelhante aos arrays associativos do php)
     # (ou os arrays objetos literais do javascript) onde passamos essa variavel para ser utilizada no template)
     context = {'ultimas_questoes': ultimas_questoes}
@@ -21,11 +21,14 @@ def caneta(request):
     return HttpResponse("<h1>Caneta Azul, Azul caneta...</h1>")
 
 def detalhe(request, questao_id):
-    try:
-        questao = Questao.objects.get(pk=questao_id)
-    except Questao.DoesNotExists:
-        raise Http404("Questao nao ecxisty")
-    return render(request, 'enquete/detalhe.html', {'questao': questao})
+    # try:
+    #     questao = Questao.objects.get(pk=questao_id)
+    # except Questao.DoesNotExists:
+    #     raise Http404("Questao nao ecxisty")
+    # faz uma consulta e se não retornar nada levanta um erro 404
+    # para comentar pode segurar "ctrl" + "/" ou ";", comenta tudo que você selecionar
+    questao = get_object_or_404(Questao, pk=questao_id)
+    return render(request, 'enquete/detalhe.html', {'questao': questao}) # render pega as informações da requisição(dados de um formulário), pega o template e a variável, renderizar
 
 def resultados(request, questao_id):
     response = "Voce esta olhando o resultado da questao %s."
