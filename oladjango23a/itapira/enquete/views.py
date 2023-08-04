@@ -32,8 +32,8 @@ def detalhe(request, questao_id):
     return render(request, 'enquete/detalhe.html', {'questao': questao}) # render pega as informações da requisição(dados de um formulário), pega o template e a variável, renderizar
 
 def resultados(request, questao_id):
-    response = "Voce esta olhando o resultado da questao %s."
-    return HttpResponse(response % questao_id)
+    questao = get_object_or_404(Questao, pk=questao_id)
+    return render(request, 'enquete/resultado.html', {'questao': questao})
 
 def voto(request, questao_id):
     questao = get_object_or_404(Questao, pk=questao_id)
